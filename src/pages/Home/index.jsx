@@ -1,7 +1,8 @@
 function Home() {
+  console.log('fred');
   return (
     <div>
-      Page d'accueil
+      Page d'accueil 🏡
     </div>
   );
 }

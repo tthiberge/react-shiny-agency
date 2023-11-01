@@ -1,0 +1,6 @@
+{
+  "extends": ["react-app"], // Part de la configuration par défaut de react-app
+  "rules": {
+    "no-console": "off"
+  }
+}
