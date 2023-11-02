@@ -65,8 +65,8 @@ function Header() {
 
       <StyledNav>
         <StyledLink  to="/">Accueil</StyledLink >
-        <StyledLink  to="/survey/1" $isFullLink>Questionnaire</StyledLink >
-        <StyledLink  to="/freelances">Profils</StyledLink >
+        <StyledLink  to="/survey/1" >Questionnaire</StyledLink >
+        <StyledLink  to="/freelances" $isFullLink>Faire le test</StyledLink >
       </StyledNav>
     </StyledBanner>
   )
