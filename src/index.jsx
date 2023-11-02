@@ -4,13 +4,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/index'
 import Survey from './pages/Survey/index'
 // import Survey from './pages/Survey'
-// import Header from './components/Header'
+import Header from './components/Header/index'
 // import Error from './components/Error'
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/survey" element={<Survey />} />
