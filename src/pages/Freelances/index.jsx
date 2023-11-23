@@ -1,76 +1,86 @@
-import Card from '../../components/Card';
+import { useEffect, useState } from 'react'
+import Card from '../../components/Card'
 import styled from 'styled-components'
-
-
-const freelanceProfiles = [
-    {
-        name: 'Jane Doe',
-        jobTitle: 'Devops'
-      },
-    {
-        name: 'John Doe',
-        jobTitle: 'Developpeur frontend'
-      },
-    {
-        name: 'Jeanne Biche',
-        jobTitle: 'Développeuse Fullstack'
-      },
-    {
-        name: 'Lauren Ipsum',
-        jobTitle: 'UX Designer'
-      },
-]
+import colors from '../../utils/style/colors'
+import { Loader } from '../../utils/style/Atoms'
 
 const CardsContainer = styled.div`
-    display: grid;
-    width: 800px;
-    margin: 0px auto;
-    gap: 24px;
-    grid-template-rows: 350px 350px;
-    grid-template-columns: repeat(2, 1fr);
-    margin-bottom: 200px;
-
+  display: grid;
+  gap: 24px;
+  grid-template-rows: 350px 350px;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-items: center;
 `
 
-const Title = styled.h1`
-  color: #2F2E41;
-  text-align: center;
-  font-family: Trebuchet MS;
+const PageTitle = styled.h1`
   font-size: 30px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 132.5%; /* 39.75px */
-  margin-bottom: 52px;
+  color: black;
+  text-align: center;
+  padding-bottom: 30px;
 `
 
-const Subtitle = styled.p`
-  color: #8186A0;
-  text-align: center;
-  font-family: Trebuchet MS;
+const PageSubtitle = styled.h2`
   font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 132.5%; /* 26.5px */
-  margin-bottom: 90px;
-
+  color: ${colors.secondary};
+  font-weight: 300;
+  text-align: center;
+  padding-bottom: 30px;
+`
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `
 
 function Freelances() {
-  return (
-      <div>
-          <Title>Trouvez votre prestataire</Title>
-          <Subtitle>Chez Shiny nous réunissons les meilleurs profils pour vous.</Subtitle>
+  const [isDataLoading, setDataLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [freelancersList, setFreelancesList] = useState([])
 
-          <CardsContainer>
-              {freelanceProfiles.map((profile, index) => (
-                  <Card
-                      key={`${profile.name}-${index}`}
-                      label={profile.jobTitle}
-                      title={profile.name}
-                  />
-              ))}
-          </CardsContainer>
-      </div>
+  useEffect(() => {
+    async function fetchFreelances() {
+      setDataLoading(true)
+      try {
+        const response = await fetch(`http://localhost:8000/freelances`)
+        const { freelancersList } = await response.json()
+        setFreelancesList(freelancersList)
+      } catch (err) {
+        console.log('===== error =====', err)
+        setError(true)
+      } finally {
+        setDataLoading(false)
+      }
+    }
+    fetchFreelances()
+  }, [])
+
+  if (error) {
+    return <span>Oups il y a eu un problème</span>
+  }
+
+  return (
+    <div>
+      <PageTitle>Trouvez votre prestataire</PageTitle>
+      <PageSubtitle>
+        Chez Shiny nous réunissons les meilleurs profils pour vous.
+      </PageSubtitle>
+      {isDataLoading ? (
+        <LoaderWrapper>
+          <Loader />
+        </LoaderWrapper>
+      ) : (
+        <CardsContainer>
+          {freelancersList.map((profile, index) => (
+            <Card
+              key={`${profile.name}-${index}`}
+              label={profile.job}
+              title={profile.name}
+              pictureUrl={profile.picture}
+            />
+          ))}
+        </CardsContainer>
+      )}
+    </div>
   )
 }
 

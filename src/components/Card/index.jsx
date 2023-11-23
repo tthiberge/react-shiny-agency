@@ -45,11 +45,11 @@ const CardWrapper = styled.div`
   }
 `
 
-function Card({ label, title }) {
+function Card({ label, title, pictureUrl }) {
   return (
     <CardWrapper>
       <CardLabel>{label}</CardLabel>
-      <CardImage src={avatar} alt="freelance" />
+      <CardImage src={pictureUrl} alt="freelance" />
       <CardName>{title}</CardName>
     </CardWrapper>
   )
@@ -58,11 +58,14 @@ function Card({ label, title }) {
 Card.propTypes = {
   label: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  pictureUrl: PropTypes.string,
 }
 
 Card.defaultProps = {
   label: '',
-  title: ''
+  title: '',
+  pictureUrl: avatar
+
 }
 
 export default Card
