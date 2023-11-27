@@ -1,43 +1,38 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
-import avatar from '../../assets/people_shiny.png'
+import DefaultPicture from '../../assets/profile.png'
 
 const CardLabel = styled.span`
-  color: ${colors.primary};
-  text-align: center;
-  font-family: Trebuchet MS;
+  color: #5843e4;
   font-size: 22px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  font-weight: normal;
+  padding-left: 15px;
 `
 
-const CardName = styled.span`
-  color: #000;
-  text-align: center;
-  font-family: Trebuchet MS;
-  font-size: 25px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+const CardTitle = styled.span`
+  color: black;
+  font-size: 22px;
+  font-weight: normal;
+  align-self: center;
 `
 
 const CardImage = styled.img`
-  height: 148px;
-  width: 148px;
+  height: 150px;
+  width: 150px;
+  align-self: center;
   border-radius: 50%;
 `
 
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 37px;
-  align-items: center;
-  padding: 33px 20px;
+  justify-content: space-around;
+  padding: 15px;
   background-color: ${colors.backgroundLight};
   border-radius: 30px;
-  width: 350px;
+  width: 300px;
+  height: 300px;
   transition: 200ms;
   &:hover {
     cursor: pointer;
@@ -45,12 +40,12 @@ const CardWrapper = styled.div`
   }
 `
 
-function Card({ label, title, pictureUrl }) {
+function Card({ label, title, picture }) {
   return (
     <CardWrapper>
       <CardLabel>{label}</CardLabel>
-      <CardImage src={pictureUrl} alt="freelance" />
-      <CardName>{title}</CardName>
+      <CardImage src={picture} alt="freelance" />
+      <CardTitle>{title}</CardTitle>
     </CardWrapper>
   )
 }
@@ -58,14 +53,13 @@ function Card({ label, title, pictureUrl }) {
 Card.propTypes = {
   label: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  pictureUrl: PropTypes.string,
+  picture: PropTypes.string.isRequired,
 }
 
 Card.defaultProps = {
   label: '',
   title: '',
-  pictureUrl: avatar
-
+  picture: DefaultPicture,
 }
 
 export default Card
