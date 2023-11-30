@@ -1,10 +1,11 @@
-import { useState, useEffect, useContext } from 'react'
+import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
 import { Loader } from '../../utils/style/Atoms'
 import { SurveyContext } from '../../utils/context'
+import { useFetch } from '../../utils/hooks'
 
 
 const SurveyContainer = styled.div`
@@ -62,33 +63,17 @@ function Survey() {
   const questionNumberInt = parseInt(questionNumber)
   const prevQuestionNumber = questionNumberInt === 1 ? 1 : questionNumberInt - 1
   const nextQuestionNumber = questionNumberInt + 1
-  const [surveyData, setSurveyData] = useState({})
-  const [isDataLoading, setDataLoading] = useState(false)
-  const { answers, saveAnswers } = useContext(SurveyContext)
-  const [error, setError] = useState(false)
 
+  const { answers, saveAnswers } = useContext(SurveyContext)
 
   function saveReply(answer) {
     saveAnswers({ [questionNumber]: answer })
     console.log(answers)
   }
 
-  useEffect(() => {
-    async function fetchSurvey() {
-      setDataLoading(true)
-      try {
-        const response = await fetch(`http://localhost:8000/survey`)
-        const { surveyData } = await response.json()
-        setSurveyData(surveyData)
-      } catch (err) {
-        console.log(err)
-        setError(true)
-      } finally {
-        setDataLoading(false)
-      }
-    }
-    fetchSurvey()
-  }, [])
+  const { data, isLoading, error } = useFetch(`http://localhost:8000/survey`)
+  const { surveyData } = data // J'extraie (déstructure) la clé surveyData de l'objet de réponse de la requête HTTP enregistrée sous le nom de data
+
 
   if (error) {
     return <span>Oups il y a eu un problème</span>
@@ -97,10 +82,12 @@ function Survey() {
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
-      {isDataLoading ? (
+      {isLoading ? (
         <Loader />
-      ) : (
-        <QuestionContent>{surveyData[questionNumber]}</QuestionContent>
+      ) : ( // rajouter une condition sur l'existence de surveyData - ça ne rend le composant que quand surveyData existe
+        <QuestionContent>
+          {surveyData && surveyData[questionNumber]}
+        </QuestionContent>
       )}
 
       <ReplyWrapper>
@@ -120,7 +107,7 @@ function Survey() {
 
       <LinkWrapper>
         <Link to={`/survey/${prevQuestionNumber}`}>Précédent</Link>
-        {surveyData[questionNumberInt + 1] ? (
+        {surveyData && surveyData[questionNumberInt + 1] ? ( // rajouter une condition sur l'existence de surveyData - ça ne rend le composant que quand surveyData existe
           <Link to={`/survey/${nextQuestionNumber}`}>Suivant</Link>
         ) : (
           <Link to="/results">Résultats</Link>
