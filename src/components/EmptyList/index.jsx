@@ -1,8 +1,7 @@
-import { Component } from 'react'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
 import EmptyIllustration from '../../assets/empty.svg'
-import { useFetch, useTheme } from '../../utils/hooks'
+import { useTheme } from '../../utils/hooks'
 
 
 const Container = styled.div`
