@@ -1,6 +1,7 @@
 import { useContext } from 'react'
-import { SurveyContext } from '../../utils/context'
 import styled from 'styled-components'
+import EmptyList from '../../components/EmptyList'
+import { SurveyContext } from '../../utils/context'
 import colors from '../../utils/style/colors'
 import { useFetch, useTheme } from '../../utils/hooks'
 import { StyledLink, Loader } from '../../utils/style/Atoms'
@@ -85,6 +86,10 @@ function Results() {
 
   const resultsData = data?.resultsData
 
+  if (resultsData?.length < 1) {
+    return <EmptyList theme={theme} />
+  }
+
   return isLoading ? (
     <LoaderWrapper>
       <Loader data-testid="loader" />
@@ -110,14 +115,14 @@ function Results() {
         {resultsData &&
           resultsData.map((result, index) => (
             <JobDescription
-            theme={theme}
-            key={`result-detail-${index}-${result.title}`}
-          >
-            <JobTitle theme={theme} data-testid="job-title">
-              {result.title}
-            </JobTitle>
-            <p data-testid="job-description">{result.description}</p>
-          </JobDescription>
+              theme={theme}
+              key={`result-detail-${index}-${result.title}`}
+            >
+              <JobTitle theme={theme} data-testid="job-title">
+                {result.title}
+              </JobTitle>
+              <p data-testid="job-description">{result.description}</p>
+            </JobDescription>
           ))}
       </DescriptionWrapper>
     </ResultsContainer>
